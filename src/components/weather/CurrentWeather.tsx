@@ -1,6 +1,6 @@
 import { CurrentWeather as CurrentWeatherType, DataSource } from '@/types/weather';
 import { WeatherIcon, getConditionLabel } from './WeatherIcon';
-import { Droplets, Wind, Gauge, Eye, Sun, ThermometerSun, Radio, Wifi } from 'lucide-react';
+import { Droplets, Wind, Gauge, Cloud, ThermometerSun, Radio, Wifi, Radiation, CloudRain } from 'lucide-react';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 
@@ -43,13 +43,14 @@ export const CurrentWeatherDisplay = ({ data, location, dataSource }: CurrentWea
       </div>
       
       {/* Weather Stats Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mt-8">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 mt-8">
         <StatCard icon={<ThermometerSun size={20} />} label="Terasa" value={`${data.feelsLike}°C`} />
         <StatCard icon={<Droplets size={20} />} label="Kelembaban" value={`${data.humidity}%`} />
         <StatCard icon={<Wind size={20} />} label="Angin" value={`${data.windSpeed} km/h`} subtitle={data.windDirection} />
         <StatCard icon={<Gauge size={20} />} label="Tekanan" value={`${data.pressure} hPa`} />
-        <StatCard icon={<Eye size={20} />} label="Visibilitas" value={`${data.visibility} km`} />
-        <StatCard icon={<Sun size={20} />} label="UV Index" value={data.uvIndex.toString()} subtitle={getUVLevel(data.uvIndex)} />
+        <StatCard icon={<Cloud size={20} />} label="Awan" value={`${getCloudCoverage(data.condition)}%`} subtitle={getCloudLevel(data.condition)} />
+        <StatCard icon={<Radiation size={20} />} label="Radiasi" value={data.uvIndex.toString()} subtitle={getRadiationLevel(data.uvIndex)} />
+        <StatCard icon={<CloudRain size={20} />} label="Hujan" value={`${getRainProbability(data.condition, data.humidity)}%`} subtitle="Prediksi" />
       </div>
     </div>
   );
@@ -73,10 +74,42 @@ const StatCard = ({ icon, label, value, subtitle }: StatCardProps) => (
   </div>
 );
 
-const getUVLevel = (index: number): string => {
+const getRadiationLevel = (index: number): string => {
   if (index <= 2) return 'Rendah';
   if (index <= 5) return 'Sedang';
   if (index <= 7) return 'Tinggi';
   if (index <= 10) return 'Sangat Tinggi';
   return 'Ekstrem';
+};
+
+const getCloudCoverage = (condition: string): number => {
+  switch (condition) {
+    case 'cerah': return 10;
+    case 'berawan': return 60;
+    case 'hujan': return 85;
+    case 'badai-petir': return 95;
+    case 'kabut': return 100;
+    case 'salju': return 80;
+    default: return 50;
+  }
+};
+
+const getCloudLevel = (condition: string): string => {
+  const coverage = getCloudCoverage(condition);
+  if (coverage <= 25) return 'Cerah';
+  if (coverage <= 50) return 'Sedikit';
+  if (coverage <= 75) return 'Sedang';
+  return 'Mendung';
+};
+
+const getRainProbability = (condition: string, humidity: number): number => {
+  switch (condition) {
+    case 'hujan': return 90;
+    case 'badai-petir': return 95;
+    case 'salju': return 80;
+    case 'berawan': return Math.min(humidity - 20, 50);
+    case 'kabut': return 30;
+    case 'cerah': return Math.max(humidity - 60, 5);
+    default: return 20;
+  }
 };
