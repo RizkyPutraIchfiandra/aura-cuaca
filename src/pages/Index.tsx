@@ -10,15 +10,15 @@ import { ActivityRecommendations } from '@/components/weather/ActivityRecommenda
 import { EconomicImpactDisplay } from '@/components/weather/EconomicImpact';
 import { CloudLightning, RefreshCw } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-
 const Index = () => {
   const [location, setLocation] = useState('Jakarta, Indonesia');
   const [dataSource, setDataSource] = useState<DataSource>('api');
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
-  const { toast } = useToast();
-
+  const {
+    toast
+  } = useToast();
   const fetchWeatherData = (loc: string, source: DataSource, showToast = true) => {
     setLoading(true);
     // Simulate API call with shorter delay for better UX
@@ -30,33 +30,27 @@ const Index = () => {
       setDataSource(source);
       setLastUpdate(new Date());
       setLoading(false);
-      
       if (showToast) {
         toast({
           title: "Data Cuaca Diperbarui",
-          description: `Menampilkan cuaca untuk ${loc} (${source === 'sensor' ? 'Sensor Lapangan' : 'Model API'})`,
+          description: `Menampilkan cuaca untuk ${loc} (${source === 'sensor' ? 'Sensor Lapangan' : 'Model API'})`
         });
       }
     }, 300);
   };
-
   useEffect(() => {
     fetchWeatherData(location, dataSource, false);
-    
+
     // Auto-refresh every minute
     const interval = setInterval(() => {
       fetchWeatherData(location, dataSource, true);
     }, 60000);
-    
     return () => clearInterval(interval);
   }, []);
-
   const handleSearch = (loc: string, source: DataSource) => {
     fetchWeatherData(loc, source);
   };
-
-  return (
-    <div className="min-h-screen pb-12">
+  return <div className="min-h-screen pb-12">
       {/* Header */}
       <header className="sticky top-0 z-50 backdrop-blur-xl bg-background/80 border-b border-border/50">
         <div className="container mx-auto px-4 py-4">
@@ -66,16 +60,12 @@ const Index = () => {
                 <CloudLightning size={28} className="text-primary pulse-glow" />
               </div>
               <div>
-                <h1 className="text-xl font-bold">CuacaKini</h1>
+                <h1 className="text-xl font-bold">BiWeather</h1>
                 <p className="text-xs text-muted-foreground">Pemantauan Cuaca Realtime</p>
               </div>
             </div>
             
-            <button 
-              onClick={() => fetchWeatherData(location, dataSource)}
-              disabled={loading}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-secondary/50 hover:bg-secondary transition-colors text-sm"
-            >
+            <button onClick={() => fetchWeatherData(location, dataSource)} disabled={loading} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-secondary/50 hover:bg-secondary transition-colors text-sm">
               <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
               <span className="hidden sm:inline">Perbarui</span>
             </button>
@@ -85,21 +75,10 @@ const Index = () => {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-6 space-y-6">
-        <LocationSearch 
-          onSearch={handleSearch} 
-          currentLocation={location}
-          currentDataSource={dataSource}
-        />
+        <LocationSearch onSearch={handleSearch} currentLocation={location} currentDataSource={dataSource} />
         
-        {loading ? (
-          <LoadingSkeleton />
-        ) : weatherData ? (
-          <>
-            <CurrentWeatherDisplay 
-              data={weatherData.current} 
-              location={weatherData.location}
-              dataSource={weatherData.dataSource}
-            />
+        {loading ? <LoadingSkeleton /> : weatherData ? <>
+            <CurrentWeatherDisplay data={weatherData.current} location={weatherData.location} dataSource={weatherData.dataSource} />
             
             <HourlyForecastDisplay forecasts={weatherData.hourly} />
             
@@ -112,8 +91,7 @@ const Index = () => {
               <ActivityRecommendations activities={weatherData.activities} />
               <EconomicImpactDisplay impacts={weatherData.economicImpacts} />
             </div>
-          </>
-        ) : null}
+          </> : null}
       </main>
 
       {/* Footer */}
@@ -121,12 +99,9 @@ const Index = () => {
         <p>Pembaruan terakhir: {lastUpdate.toLocaleTimeString('id-ID')}</p>
         <p className="mt-1">Data cuaca diperbarui otomatis setiap menit</p>
       </footer>
-    </div>
-  );
+    </div>;
 };
-
-const LoadingSkeleton = () => (
-  <div className="space-y-6">
+const LoadingSkeleton = () => <div className="space-y-6">
     <div className="glass-card p-8">
       <div className="flex items-center gap-6">
         <div className="w-24 h-24 rounded-full bg-secondary/50 animate-pulse" />
@@ -136,23 +111,17 @@ const LoadingSkeleton = () => (
         </div>
       </div>
       <div className="grid grid-cols-3 md:grid-cols-6 gap-4 mt-8">
-        {[...Array(6)].map((_, i) => (
-          <div key={i} className="h-20 bg-secondary/50 rounded-xl animate-pulse" />
-        ))}
+        {[...Array(6)].map((_, i) => <div key={i} className="h-20 bg-secondary/50 rounded-xl animate-pulse" />)}
       </div>
     </div>
     <div className="glass-card p-6">
       <div className="flex gap-3 overflow-hidden">
-        {[...Array(8)].map((_, i) => (
-          <div key={i} className="min-w-[100px] h-32 bg-secondary/50 rounded-xl animate-pulse" />
-        ))}
+        {[...Array(8)].map((_, i) => <div key={i} className="min-w-[100px] h-32 bg-secondary/50 rounded-xl animate-pulse" />)}
       </div>
     </div>
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <div className="glass-card p-6 h-80 animate-pulse bg-secondary/30" />
       <div className="glass-card p-6 h-80 animate-pulse bg-secondary/30" />
     </div>
-  </div>
-);
-
+  </div>;
 export default Index;
