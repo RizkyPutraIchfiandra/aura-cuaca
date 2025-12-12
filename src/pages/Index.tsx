@@ -61,7 +61,7 @@ const Index = () => {
               </div>
               <div>
                 <h1 className="text-xl font-bold">BiWeather</h1>
-                <p className="text-xs text-muted-foreground">Pemantauan Cuaca Realtime</p>
+                <p className="text-xs text-muted-foreground">Prediksi Cuaca Realtime</p>
               </div>
             </div>
             
