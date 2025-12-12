@@ -44,13 +44,13 @@ export const CurrentWeatherDisplay = ({ data, location, dataSource }: CurrentWea
       
       {/* Weather Stats Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 mt-8">
+        <StatCard icon={<CloudRain size={20} />} label="Hujan" value={`${getRainProbability(data.condition, data.humidity)}%`} subtitle="Prediksi" />
         <StatCard icon={<ThermometerSun size={20} />} label="Terasa" value={`${data.feelsLike}°C`} />
         <StatCard icon={<Droplets size={20} />} label="Kelembaban" value={`${data.humidity}%`} />
         <StatCard icon={<Wind size={20} />} label="Angin" value={`${data.windSpeed} km/h`} subtitle={data.windDirection} />
         <StatCard icon={<Gauge size={20} />} label="Tekanan" value={`${data.pressure} hPa`} />
         <StatCard icon={<Cloud size={20} />} label="Awan" value={`${getCloudCoverage(data.condition)}%`} subtitle={getCloudLevel(data.condition)} />
         <StatCard icon={<Radiation size={20} />} label="Radiasi" value={data.uvIndex.toString()} subtitle={getRadiationLevel(data.uvIndex)} />
-        <StatCard icon={<CloudRain size={20} />} label="Hujan" value={`${getRainProbability(data.condition, data.humidity)}%`} subtitle="Prediksi" />
       </div>
     </div>
   );
