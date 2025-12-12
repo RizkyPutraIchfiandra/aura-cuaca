@@ -20,6 +20,7 @@ export interface HourlyForecast {
   condition: WeatherCondition;
   windSpeed: number;
   precipitation: number;
+  humidity: number;
 }
 
 export interface DailyForecast {

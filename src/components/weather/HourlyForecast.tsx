@@ -2,7 +2,7 @@ import { HourlyForecast as HourlyForecastType } from '@/types/weather';
 import { WeatherIcon } from './WeatherIcon';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
-import { Clock, Droplets, Wind } from 'lucide-react';
+import { Clock, Droplets, CloudRain, Thermometer } from 'lucide-react';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 
 interface HourlyForecastProps {
@@ -31,14 +31,17 @@ export const HourlyForecastDisplay = ({ forecasts }: HourlyForecastProps) => {
                 <p className="text-sm font-medium text-muted-foreground mb-2">
                   {isNow ? 'Sekarang' : format(forecast.time, 'HH:mm', { locale: id })}
                 </p>
-                <WeatherIcon condition={forecast.condition} size={32} className="mx-auto mb-2" />
-                <p className="text-xl font-semibold">{forecast.temperature}°</p>
+                <WeatherIcon condition={forecast.condition} size={28} className="mx-auto mb-2" />
+                <div className="flex items-center justify-center gap-1 text-lg font-semibold">
+                  <Thermometer size={14} className="text-orange-500" />
+                  <span>{forecast.temperature}°</span>
+                </div>
                 <div className="flex items-center justify-center gap-1 mt-2 text-xs text-muted-foreground">
-                  <Wind size={12} />
-                  <span>{forecast.windSpeed}</span>
+                  <Droplets size={12} className="text-blue-400" />
+                  <span>{forecast.humidity}%</span>
                 </div>
                 <div className="flex items-center justify-center gap-1 text-xs text-primary">
-                  <Droplets size={12} />
+                  <CloudRain size={12} />
                   <span>{forecast.precipitation}%</span>
                 </div>
               </div>

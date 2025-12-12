@@ -15,6 +15,7 @@ const generateHourlyForecast = (): HourlyForecast[] => {
       condition: conditions[Math.floor(i / 3)] || 'berawan',
       windSpeed: Math.round(10 + Math.random() * 10),
       precipitation: i < 6 ? Math.round(60 + Math.random() * 30) : Math.round(Math.random() * 20),
+      humidity: Math.round(65 + Math.random() * 25),
     });
   }
   
