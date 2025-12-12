@@ -1,22 +1,22 @@
 import { DailyForecast as DailyForecastType } from '@/types/weather';
 import { WeatherIcon, getConditionLabel } from './WeatherIcon';
 import { Calendar, Droplets } from 'lucide-react';
-
 interface DailyForecastProps {
   forecasts: DailyForecastType[];
 }
-
-export const DailyForecastDisplay = ({ forecasts }: DailyForecastProps) => {
-  return (
-    <div className="glass-card p-6 slide-up" style={{ animationDelay: '0.3s' }}>
+export const DailyForecastDisplay = ({
+  forecasts
+}: DailyForecastProps) => {
+  return <div className="glass-card p-6 slide-up" style={{
+    animationDelay: '0.3s'
+  }}>
       <h3 className="section-title">
         <Calendar size={20} className="text-primary" />
         Prakiraan 7 Hari
       </h3>
       
       <div className="space-y-1">
-        {forecasts.map((forecast, index) => (
-          <div key={index} className="daily-row px-2 rounded-lg">
+        {forecasts.map((forecast, index) => <div key={index} className="daily-row px-2 rounded-lg">
             <div className="flex items-center gap-4 flex-1">
               <span className="w-20 font-medium">{forecast.dayName}</span>
               <WeatherIcon condition={forecast.condition} size={28} />
@@ -34,21 +34,12 @@ export const DailyForecastDisplay = ({ forecasts }: DailyForecastProps) => {
               <div className="flex items-center gap-2">
                 <span className="text-muted-foreground text-sm">{forecast.tempMin}°</span>
                 <div className="w-20 h-2 bg-secondary rounded-full overflow-hidden">
-                  <div 
-                    className="h-full rounded-full"
-                    style={{
-                      background: `linear-gradient(90deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%)`,
-                      width: `${((forecast.tempMax - forecast.tempMin) / 15) * 100}%`,
-                      marginLeft: `${((forecast.tempMin - 20) / 20) * 100}%`,
-                    }}
-                  />
+                  
                 </div>
                 <span className="font-semibold">{forecast.tempMax}°</span>
               </div>
             </div>
-          </div>
-        ))}
+          </div>)}
       </div>
-    </div>
-  );
+    </div>;
 };
