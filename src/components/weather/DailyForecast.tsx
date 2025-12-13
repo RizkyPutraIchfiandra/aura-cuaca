@@ -1,22 +1,24 @@
 import { DailyForecast as DailyForecastType } from '@/types/weather';
 import { WeatherIcon, getConditionLabel } from './WeatherIcon';
-import { Calendar, Droplets } from 'lucide-react';
+import { Calendar, Droplets, Thermometer, CloudRain } from 'lucide-react';
+
 interface DailyForecastProps {
   forecasts: DailyForecastType[];
 }
+
 export const DailyForecastDisplay = ({
   forecasts
 }: DailyForecastProps) => {
-  return <div className="glass-card p-6 slide-up" style={{
-    animationDelay: '0.3s'
-  }}>
+  return (
+    <div className="glass-card p-6 slide-up" style={{ animationDelay: '0.3s' }}>
       <h3 className="section-title">
         <Calendar size={20} className="text-primary" />
         Prakiraan 7 Hari
       </h3>
       
       <div className="space-y-1">
-        {forecasts.map((forecast, index) => <div key={index} className="daily-row px-2 rounded-lg">
+        {forecasts.map((forecast, index) => (
+          <div key={index} className="daily-row px-2 rounded-lg">
             <div className="flex items-center gap-4 flex-1">
               <span className="w-20 font-medium">{forecast.dayName}</span>
               <WeatherIcon condition={forecast.condition} size={28} />
@@ -26,20 +28,24 @@ export const DailyForecastDisplay = ({
             </div>
             
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-1 text-sm text-primary">
-                <Droplets size={14} />
-                <span>{forecast.precipitation}%</span>
+              <div className="flex items-center gap-1 text-sm">
+                <Thermometer size={14} className="text-orange-500" />
+                <span className="font-semibold">{Math.round((forecast.tempMax + forecast.tempMin) / 2)}°</span>
               </div>
               
-              <div className="flex items-center gap-2">
-                <span className="text-muted-foreground text-sm">{forecast.tempMin}°</span>
-                <div className="w-20 h-2 bg-secondary rounded-full overflow-hidden">
-                  
-                </div>
-                <span className="font-semibold">{forecast.tempMax}°</span>
+              <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                <Droplets size={14} className="text-blue-400" />
+                <span>{forecast.humidity}%</span>
+              </div>
+              
+              <div className="flex items-center gap-1 text-sm text-primary">
+                <CloudRain size={14} />
+                <span>{forecast.precipitation}%</span>
               </div>
             </div>
-          </div>)}
+          </div>
+        ))}
       </div>
-    </div>;
+    </div>
+  );
 };
